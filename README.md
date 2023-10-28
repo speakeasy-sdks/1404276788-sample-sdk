@@ -114,8 +114,6 @@ if res.drinks is not None:
 
 <!-- Start Dev Containers -->
 
-
-
 <!-- End Dev Containers -->
 
 
@@ -173,9 +171,78 @@ http_client = requests.Session()
 http_client.headers.update({'x-custom-header': 'someValue'})
 s = speakeasybar.Speakeasybar(client: http_client)
 ```
-
-
 <!-- End Custom HTTP Client -->
+
+
+
+<!-- Start Server Selection -->
+# Server Selection
+
+## Select Server by Name
+
+You can override the default server globally by passing a server name to the `server: str` optional parameter when initializing the SDK client instance. The selected server will then be used as the default on the operations that use it. This table lists the names associated with the available servers:
+
+| Name | Server | Variables |
+| ----- | ------ | --------- |
+| `prod` | `https://speakeasy.bar` | None |
+| `staging` | `https://staging.speakeasy.bar` | None |
+| `customer` | `https://{organization}.{environment}.speakeasy.bar` | `environment` (default is `prod`), `organization` (default is `api`) |
+
+
+Some of the server options above contain variables. If you want to set the values of those variables, the following options are provided for doing so:
+ * `environment: ServerEnvironment`
+
+ * `organization: str`
+
+For example:
+
+
+```python
+import speakeasybar
+from speakeasybar.models import operations, shared
+
+s = speakeasybar.Speakeasybar(
+    security=shared.Security(
+        api_key="",
+    ),
+    server="customer"
+)
+
+req = operations.AuthenticateRequestBody()
+
+res = s.authentication.authenticate(req)
+
+if res.authenticate_200_application_json_object is not None:
+    # handle response
+    pass
+```
+
+
+## Override Server URL Per-Client
+
+The default server can also be overridden globally by passing a URL to the `server_url: str` optional parameter when initializing the SDK client instance. For example:
+
+
+```python
+import speakeasybar
+from speakeasybar.models import operations, shared
+
+s = speakeasybar.Speakeasybar(
+    security=shared.Security(
+        api_key="",
+    ),
+    server_url="https://speakeasy.bar"
+)
+
+req = operations.AuthenticateRequestBody()
+
+res = s.authentication.authenticate(req)
+
+if res.authenticate_200_application_json_object is not None:
+    # handle response
+    pass
+```
+<!-- End Server Selection -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 
